@@ -1,0 +1,37 @@
+.cards{    
+    flex-direction: row;
+    width:500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    width:150px;
+    height:75px;
+    margin:50px;
+}
+
+
+.card h1{
+    text-decoration: none;
+    color:black;
+    font-size: 25px;
+}
+
+.card h1:hover{
+    cursor: pointer;
+}
+
+ul{
+    border-bottom:solid black 2px;
+    padding:10px
+}
+
+Form.Group{
+    margin:10px;
+}

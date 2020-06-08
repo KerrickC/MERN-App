@@ -1,0 +1,48 @@
+import React, { Component } from 'react'
+import Card from 'react-bootstrap/Card'
+import Form from 'react-bootstrap/Form'
+import FormGroup from 'react-bootstrap/FormGroup';
+import Button from 'react-bootstrap/Button'
+
+const TestPost = (props) => {
+
+    const postData = () => {
+        let title = document.getElementById('title').value
+        let desc = document.getElementById('desc').value
+        let author = document.getElementById('author').value
+        let postDataObj= {
+            'name': title,
+            'desc': desc,
+            'author': author
+        }
+
+        props.postData(postDataObj)
+    }
+
+
+
+    return (
+        <div className="">
+            <Card className="card">
+                <h1>Post</h1>
+                <Form>
+                    <Form.Group controlId="formTitle">
+                        <Form.Control type="text" id="title" placeholder="Enter title" />
+                    </Form.Group>
+                    <Form.Group controlId="formDesc">
+                        <Form.Control type="text" id="desc" placeholder="Enter description" />
+                    </Form.Group>
+                    <Form.Group controlId="formAuthor">
+                        <Form.Control type="text" id="author" placeholder="Enter author" />
+                    </Form.Group>
+                    <Button variant="primary" onClick={postData}>
+                        Submit
+                        </Button>
+                </Form>
+            </Card>
+        </div>
+    )
+}
+
+
+export default TestPost
