@@ -13,6 +13,7 @@ const jwt = require('jsonwebtoken')
 
 const router = express.Router()
 
+//register - not in UI (postman)
 router.post('/register', (req, res) => {
     console.log(req.body)
     const { username, password } = req.body
@@ -26,12 +27,13 @@ router.post('/register', (req, res) => {
     })
 })
 
+//login using login strategy and send status 200
 router.post('/authenticate', passport.authenticate('login', { successFlash: true, session: false }), (req, res) => {
     console.log(req.user)
     res.status(200).send(req.user)
 })
 
-
+//login strategy
 passport.use('login', new LocalStrategy(
     function (username, password, done) {
         User.findOne({ username: username }, (err, user) => {
@@ -49,17 +51,20 @@ passport.use('login', new LocalStrategy(
                     console.log('incorrect password')
                     return done(null, false, { message: 'Incorrect password' })
                 } else {
+                    //issue token
                     const payload = { username };
                     const token = jwt.sign(payload, "secret", {expiresIn: '1h'});
                     return done(null, token)
+                    //return token to be stored in localStorage
                 }
             })) {
-                console.log('IDK')
+                console.log('im lost')
             }
         })
     }
 ))
 
+//jwt strategy
 passport.use('jwt',new JwtStrategy(
     {
       secretOrKey: "secret",
@@ -69,13 +74,10 @@ passport.use('jwt',new JwtStrategy(
     (payload, done) => done(null, payload)
   ))
 
-
-
-
-
-
+//get all tests if jwt is authenticated
 router.get('/tests', passport.authenticate('jwt', { successFlash: true, session: false}), async (req, res) => {
-    console.log(req.user)
+    //console.log(req.user)
+
     await TestSchema.find({}, (err, tests) => {
         if (err) {
             return res.status(400).json(
@@ -91,7 +93,7 @@ router.get('/tests', passport.authenticate('jwt', { successFlash: true, session:
     }).catch(err => console.log("here"))
 })
 
-
+//post if jwt is authenticaed 
 router.post('/test', passport.authenticate('jwt', { successFlash: true, session: false}),(req, res) => {
     const body = req.body
     if (!body) {
@@ -122,7 +124,7 @@ router.post('/test', passport.authenticate('jwt', { successFlash: true, session:
         })
 })
 
-
+//delete post if jwt is authenticated
 router.delete('/test/:id',passport.authenticate('jwt', { successFlash: true, session: false}), async (req, res) => {
     await TestSchema.findOneAndDelete({ _id: req.params.id }, (err, test) => {
         if (err) {
@@ -134,16 +136,6 @@ router.delete('/test/:id',passport.authenticate('jwt', { successFlash: true, ses
 
     }).catch(err => console.log(err))
 })
-
-
-
-
-// Issue token
-// const payload = { username };
-// const token = jwt.sign(payload, "secret", { expiresIn: '1h' });
-// //console.log(token)
-// res.status(200).json({ token })
-
 
 
 module.exports = router
