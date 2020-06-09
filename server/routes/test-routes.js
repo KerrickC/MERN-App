@@ -64,7 +64,7 @@ passport.use('login', new LocalStrategy(
     }
 ))
 
-//jwt strategy
+//jwt strategy for access to database info
 passport.use('jwt',new JwtStrategy(
     {
       secretOrKey: "secret",
