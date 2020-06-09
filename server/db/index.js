@@ -1,5 +1,3 @@
-// manages relationships between data, provides schema validation, and is used to translate 
-// between objects in code and the representation of those objects in MongoDB.
 
 const mongoose = require('mongoose')
 const expressSession  = require('express-session')

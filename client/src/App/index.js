@@ -16,9 +16,7 @@ function App() {
         <h1>Test Query App</h1>
       </header>
       {loggedIn ?
-        <Cards />
-        :
-        <Login setLogged={setLogged}  />
+        <Cards /> :  <Login setLogged={setLogged}  />
       }
     </div>
   );

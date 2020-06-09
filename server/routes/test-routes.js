@@ -49,7 +49,6 @@ passport.use('login', new LocalStrategy(
                     console.log('incorrect password')
                     return done(null, false, { message: 'Incorrect password' })
                 } else {
-                    //console.log(user)
                     const payload = { username };
                     const token = jwt.sign(payload, "secret", {expiresIn: '1h'});
                     return done(null, token)
