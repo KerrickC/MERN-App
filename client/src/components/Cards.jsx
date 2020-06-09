@@ -4,7 +4,6 @@ import *as api from '../api/index'
 import TestGet from '../pages/TestGet'
 import TestDelete from '../pages/TestDelete'
 import TestPost from '../pages/TestPost'
-import login from '../pages/login'
 
 
 const Cards = (props) => {
@@ -29,6 +28,7 @@ const Cards = (props) => {
     return (
         <React.Fragment>
             <div className="cards">
+
                 <div className="get">
                     <TestGet getData={getAllData} gdata={data} />
                 </div>
@@ -39,9 +39,9 @@ const Cards = (props) => {
                     <TestDelete deleteData={deleteDataById} />
                 </div>
             </div>
-            <div className="logoutbuttondiv">
+            {/* <div className="logoutbuttondiv">
                 <button>Logout</button>
-            </div>
+            </div> */}
         </React.Fragment>
     )
 

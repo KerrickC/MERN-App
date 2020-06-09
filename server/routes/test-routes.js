@@ -1,40 +1,82 @@
 const express = require('express')
 
 const passport = require('passport')
+const LocalStrategy = require('passport-local').Strategy
+const JwtStrategy = require('passport-jwt').Strategy
+const {ExtractJwt} = require('passport-jwt')
 
 const TestSchema = require('../models/test-model')
 const User = require('../models/user-model')
 
+
 const jwt = require('jsonwebtoken')
-const withAuth = require('../middlewear/middlewear')
 
 const router = express.Router()
 
+router.post('/register', (req, res) => {
+    console.log(req.body)
+    const { username, password } = req.body
+    const user = new User({ username, password })
+    user.save((err) => {
+        if (err) {
+            res.status(500).send("Could not register user")
+        } else {
+            res.status(200).send("Welcome to Club Kerrick")
+        }
+    })
+})
+
+router.post('/authenticate', passport.authenticate('login', { successFlash: true, session: false }), (req, res) => {
+    console.log(req.user)
+    res.status(200).send(req.user)
+})
+
+
+passport.use('login', new LocalStrategy(
+    function (username, password, done) {
+        User.findOne({ username: username }, (err, user) => {
+            if (err) {
+                console.log('here')
+                return done(err)
+            }
+            if (!user) {
+                return done(null, false, { message: 'Incorrect username.' })
+            }
+            if (user.isCorrectPassword(password, (err, same) => {
+                if (err) {
+                    console.log('internal error')
+                } else if (!same) {
+                    console.log('incorrect password')
+                    return done(null, false, { message: 'Incorrect password' })
+                } else {
+                    //console.log(user)
+                    const payload = { username };
+                    const token = jwt.sign(payload, "secret", {expiresIn: '1h'});
+                    return done(null, token)
+                }
+            })) {
+                console.log('IDK')
+            }
+        })
+    }
+))
+
+passport.use('jwt',new JwtStrategy(
+    {
+      secretOrKey: "secret",
+      jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
+      algorithms:['HS256']
+    },
+    (payload, done) => done(null, payload)
+  ))
 
 
 
 
 
-//Delete, Post(all or one), and Get
 
-// //not using
-// router.get('/test/:id', (req, res) => {
-//     const id = req.params.id
-//     TestSchema.findOne({ _id: id })
-//         .then((data) => {
-//             return res.status(200).json(data)
-//         })
-//         .catch(error => {
-//             return res.status(404).json({
-//                 error,
-//                 message: 'Data not found',
-//             })
-//         })
-
-// })
-
-router.get('/tests', async (req, res) => {
-    //console.log("get all")
+router.get('/tests', passport.authenticate('jwt', { successFlash: true, session: false}), async (req, res) => {
+    console.log(req.user)
     await TestSchema.find({}, (err, tests) => {
         if (err) {
             return res.status(400).json(
@@ -47,11 +89,11 @@ router.get('/tests', async (req, res) => {
                 .json({ success: false, error: `TestSchema not found` })
         }
         return res.status(200).json({ success: true, data: tests })
-    }).catch(err => console.log(err))
+    }).catch(err => console.log("here"))
 })
 
 
-router.post('/test', (req, res) => {
+router.post('/test', passport.authenticate('jwt', { successFlash: true, session: false}),(req, res) => {
     const body = req.body
     if (!body) {
         return res.status(400).json({
@@ -82,7 +124,7 @@ router.post('/test', (req, res) => {
 })
 
 
-router.delete('/test/:id', async (req, res) => {
+router.delete('/test/:id',passport.authenticate('jwt', { successFlash: true, session: false}), async (req, res) => {
     await TestSchema.findOneAndDelete({ _id: req.params.id }, (err, test) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -94,55 +136,15 @@ router.delete('/test/:id', async (req, res) => {
     }).catch(err => console.log(err))
 })
 
-router.post('/register', (req, res) => {
-    console.log(req.body)
-    const { username, password } = req.body
-    const user = new User({ username, password })
-    user.save((err) => {
-        if (err) {
-            res.status(500).send("Could not register user")
-        } else {
-            res.status(200).send("Welcome to Club Kerrick")
-        }
-    })
-})
 
-router.post('/authenticate', (req, res) => {
-    const { username, password } = req.body
-    console.log(req.body)
-    User.findOne({ username }, (err, user) => {
-        if (err) {
-            console.error(err)
-            res.status(500).json({ error: 'Internal error' })
-        } else if (!user) {
-            res.status(401).json({ error: 'Incorrect username or password' })
-        } else {
-            user.isCorrectPassword(password, (err, same) => {
-                if (err) {
-                    console.log(err)
-                    res.status(500).json({ error: 'Internal error' })
-                } else if (!same) {
-                    res.status(401).json({ error: 'Incorrect username or password' })
-                } else {
-                    // Issue token
-                    const payload = { username };
-                    const token = jwt.sign(payload, "secret", { expiresIn: '1h' });
-                    // res.cookie('token', token, { httpOnly: true }).sendStatus(200);
-                    console.log(token)
-                    res.status(200).json({token})
-                }
-            })
-        }
-    })
-})
 
-router.get('/secret', withAuth, (req, res) => {
-    res.send('Secret code: kerrickiscool')
-})
 
-router.get('/checkToken', withAuth, (req, res) => {
-    res.sendStatus(200);
-})
+// Issue token
+// const payload = { username };
+// const token = jwt.sign(payload, "secret", { expiresIn: '1h' });
+// //console.log(token)
+// res.status(200).json({ token })
+
 
 
 module.exports = router

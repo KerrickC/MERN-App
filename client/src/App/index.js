@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Cards from '../components/Cards';
 import Login from '../pages/login'
 
 
+
 function App() {
 
-  const [loggedIn, setLogged] = useState(false)
+   const [loggedIn, setLogged] = useState(false)
+
+
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>Test Query App</h1>
-
       </header>
       {loggedIn ?
         <Cards />

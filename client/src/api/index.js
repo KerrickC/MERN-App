@@ -1,12 +1,16 @@
-import React from 'react';
 
 import axios from 'axios';
 
+const header = {headers:{
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+}}
+
 const api = axios.create({
-    baseURL: 'http://localhost:3003/api',
+    baseURL: 'http://localhost:3004/api',
 })
 
-export const insertTest = (payload) => api.post(`/test`, payload);
-export const getAllTests = () => api.get(`/tests`);
-export const getTestById = (id) => api.get(`/test/${id}`);
-export const deleteTestById = (id) => api.delete(`/test/${id}`);
+
+export const insertTest = (payload) => api.post(`/test`, payload, header);
+export const getAllTests = () => api.get(`/tests`, header);
+export const getTestById = (id) => api.get(`/test/${id}`, header);
+export const deleteTestById = (id) => api.delete(`/test/${id}`, header);
