@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs') //hash user info
 
-const saltRounds = 10 //time needed to single BCrypt hash
+const saltRounds = 10 //time needed for single BCrypt hash
 
 //user schema with username and password
 const UserSchema = new mongoose.Schema({
@@ -27,7 +27,7 @@ UserSchema.pre('save', function(next){
     }
 })
 
-//bcrypt compare passwords
+//bcrypt compare passwords - compare() is built into bcrypt
 UserSchema.methods.isCorrectPassword = function(password, callback) {
     bcrypt.compare(password, this.password, (err, same) => {
         if(err){
