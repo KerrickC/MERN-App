@@ -1,9 +1,13 @@
-import React from 'react'
+import React  from 'react'
 import Card from 'react-bootstrap/Card'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import { useEffect } from 'react'
+
 
 const TestPost = (props) => {
+
+    
 
     const postData = () => {
         let title = document.getElementById('title').value
@@ -12,11 +16,19 @@ const TestPost = (props) => {
         let postDataObj= {
             'name': title,
             'desc': desc,
-            'author': author
+            'author': author,
+            // 'allowedUsers': [props.user]
         }
 
         props.postData(postDataObj)
     }
+
+  
+
+    //get author id in post
+    //push to array
+    //when getting data, map through allowedUsers array and find user
+    //grant access
 
 
 
@@ -32,7 +44,7 @@ const TestPost = (props) => {
                         <Form.Control type="text" id="desc" placeholder="Enter description" />
                     </Form.Group>
                     <Form.Group controlId="formAuthor">
-                        <Form.Control type="text" id="author" placeholder="Enter author" />
+                        <Form.Control type="text" id="author" value={props.user} readOnly={true} />
                     </Form.Group>
                     <Button variant="primary" type="submit" onClick={postData}>
                         Submit

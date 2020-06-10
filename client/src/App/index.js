@@ -8,8 +8,9 @@ const baseURL = 'http://localhost:3004/api'
 
 const App = (props) => {
 
-
   const [loggedIn, setLogged] = useState(false)
+  const [user, setUser] = useState('')
+
 
   const tok = localStorage.getItem('token')
 
@@ -20,7 +21,7 @@ const App = (props) => {
         Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     }).then((res) => {
-      if(res.status == 200){
+      if(res.status === 200){
         setLogged(true)
         console.log('success')
         localStorage.setItem('token', res.data.data)
@@ -53,10 +54,8 @@ const App = (props) => {
         <h1>Test App</h1>
         <button onClick={logout} >Logout</button>
       </header>
-      {/* if loggedIn state is true, show cards, else show login */}
-      {/* Does not protect database - still accessible without authentication (jwt) */}
       {loggedIn ?
-        <Cards /> : <Login setLogged={setLogged} />
+        <Cards user={user}/> : <Login setUser={setUser} setLogged={setLogged} />
       }
     </div>
   );

@@ -8,7 +8,6 @@ import App from './App/index';
 ReactDOM.render(
   <div className="">
     <App />
-    
   </div>
   ,
   document.getElementById('root')

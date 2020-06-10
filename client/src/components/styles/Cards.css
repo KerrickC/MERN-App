@@ -23,9 +23,6 @@
     font-size: 25px;
 }
 
-.card h1:hover{
-    cursor: pointer;
-}
 
 ul{
     border-bottom:solid black 2px;

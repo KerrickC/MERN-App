@@ -6,7 +6,7 @@ const saltRounds = 10 //time needed for single BCrypt hash
 //user schema with username and password
 const UserSchema = new mongoose.Schema({
     username: {type: String, required: true, unique: true},
-    password: {type: String, required: true}
+    password: {type: String, required: true},
 })
 
 

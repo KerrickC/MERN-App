@@ -13,6 +13,9 @@ const Login = (props) => {
     const [username, setusername] = useState('')
     const [password, setpassword] = useState('')
 
+
+
+
     const onSubmit = (event) => {
 
         const loginToJson = {
@@ -26,9 +29,10 @@ const Login = (props) => {
         axios.post(baseURL + '/authenticate', loginToJson)
             .then(res => {
                 if (res.status === 200) {
-                    alert('success')
-                    localStorage.setItem('token', res.data)
+                    localStorage.setItem('token', res.data.token)
+                    props.setUser(res.data.username)
                     props.setLogged(true)
+                    alert('success')
                 } else {
                     const error = new Error(res.error)
                     throw error
@@ -39,6 +43,7 @@ const Login = (props) => {
                 alert('Error1')
             })
     }
+
 
 
     return (

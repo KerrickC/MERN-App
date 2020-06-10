@@ -9,6 +9,8 @@ import TestPost from '../pages/TestPost'
 const Cards = (props) => {
 
     const [data, setData] = useState([])
+
+
     const getAllData = () => {
         api.getAllTests().then(response => {
             setData(response.data.data)
@@ -33,15 +35,13 @@ const Cards = (props) => {
                     <TestGet getData={getAllData} gdata={data} />
                 </div>
                 <div className="post">
-                    <TestPost postData={postDataArr} />
+                    <TestPost  user={props.user} postData={postDataArr} />
                 </div>
                 <div className="delete">
                     <TestDelete deleteData={deleteDataById} />
                 </div>
             </div>
-            {/* <div className="logoutbuttondiv">
-                <button>Logout</button>
-            </div> */}
+
         </React.Fragment>
     )
 

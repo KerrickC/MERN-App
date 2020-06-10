@@ -34,8 +34,7 @@ router.post('/authenticate', passport.authenticate('login', { successFlash: true
 })
 
 //login strategy
-passport.use('login', new LocalStrategy(
-    function (username, password, done) {
+passport.use('login', new LocalStrategy( (username, password, done) => {
         User.findOne({ username: username }, (err, user) => {
             if (err) {
                 console.log('here')
@@ -54,7 +53,7 @@ passport.use('login', new LocalStrategy(
                     //issue token
                     const payload = { username };
                     const token = jwt.sign(payload, "secret", { expiresIn: '1h' });
-                    return done(null, token)
+                    return done(null, {token, username})
                     //return token to be stored in localStorage
                 }
             })) {
@@ -77,7 +76,6 @@ passport.use('jwt', new JwtStrategy(
 
 //get all tests if jwt is authenticated
 router.get('/tests', passport.authenticate('jwt', { successFlash: true, session: false }), async (req, res) => {
-    //console.log(req.user)
 
     await TestSchema.find({}, (err, tests) => {
         if (err) {
@@ -104,13 +102,13 @@ router.post('/test', passport.authenticate('jwt', { successFlash: true, session:
         })
     }
     const test = new TestSchema(body)
-    console.log(test)
     if (!test) {
         return res.status(400).json({ success: false, error: err })
     }
     test
         .save()
         .then(() => {
+
             return res.status(201).json({
                 success: true,
                 id: test._id,

@@ -1,9 +1,12 @@
 
 import axios from 'axios';
 
-const header = {headers:{
-    Authorization: `Bearer ${localStorage.getItem('token')}`
-}}
+const header = {
+    headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+    }
+}
+
 
 const api = axios.create({
     baseURL: 'http://localhost:3004/api',
