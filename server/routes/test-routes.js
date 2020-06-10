@@ -3,7 +3,7 @@ const express = require('express')
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const JwtStrategy = require('passport-jwt').Strategy
-const {ExtractJwt} = require('passport-jwt')
+const { ExtractJwt } = require('passport-jwt')
 
 const TestSchema = require('../models/test-model')
 const User = require('../models/user-model')
@@ -29,7 +29,7 @@ router.post('/register', (req, res) => {
 
 //login using login strategy and send status 200
 router.post('/authenticate', passport.authenticate('login', { successFlash: true, session: false }), (req, res) => {
-    console.log(req.user)
+    //console.log(req.user)
     res.status(200).send(req.user)
 })
 
@@ -53,7 +53,7 @@ passport.use('login', new LocalStrategy(
                 } else {
                     //issue token
                     const payload = { username };
-                    const token = jwt.sign(payload, "secret", {expiresIn: '1h'});
+                    const token = jwt.sign(payload, "secret", { expiresIn: '1h' });
                     return done(null, token)
                     //return token to be stored in localStorage
                 }
@@ -64,18 +64,19 @@ passport.use('login', new LocalStrategy(
     }
 ))
 
+
 //jwt strategy for access to database info
-passport.use('jwt',new JwtStrategy(
+passport.use('jwt', new JwtStrategy(
     {
-      secretOrKey: "secret",
-      jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
-      algorithms:['HS256']
+        secretOrKey: "secret",
+        jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
+        algorithms: ['HS256']
     },
     (payload, done) => done(null, payload)
-  ))
+))
 
 //get all tests if jwt is authenticated
-router.get('/tests', passport.authenticate('jwt', { successFlash: true, session: false}), async (req, res) => {
+router.get('/tests', passport.authenticate('jwt', { successFlash: true, session: false }), async (req, res) => {
     //console.log(req.user)
 
     await TestSchema.find({}, (err, tests) => {
@@ -94,7 +95,7 @@ router.get('/tests', passport.authenticate('jwt', { successFlash: true, session:
 })
 
 //post if jwt is authenticaed 
-router.post('/test', passport.authenticate('jwt', { successFlash: true, session: false}),(req, res) => {
+router.post('/test', passport.authenticate('jwt', { successFlash: true, session: false }), (req, res) => {
     const body = req.body
     if (!body) {
         return res.status(400).json({
@@ -125,7 +126,7 @@ router.post('/test', passport.authenticate('jwt', { successFlash: true, session:
 })
 
 //delete post if jwt is authenticated
-router.delete('/test/:id',passport.authenticate('jwt', { successFlash: true, session: false}), async (req, res) => {
+router.delete('/test/:id', passport.authenticate('jwt', { successFlash: true, session: false }), async (req, res) => {
     await TestSchema.findOneAndDelete({ _id: req.params.id }, (err, test) => {
         if (err) {
             return res.status(400).json({ success: false, error: err })
@@ -137,5 +138,26 @@ router.delete('/test/:id',passport.authenticate('jwt', { successFlash: true, ses
     }).catch(err => console.log(err))
 })
 
+router.post('/refresh', passport.authenticate('jwt', { successFlash: true, session: false }), (req, res) => {
+    //console.log(req.user)
+    const currentUser = req.user.username
+    //if token is valid issue new token
+    User.findOne({ username: currentUser }, (err, user) => {
+        if (!user) {
+            const nouser = 'User not found'
+            return res.status(404).json({ success: false, data: nouser })
+        } else {
+            if (req.user.exp != 0) {
+                //console.log('yay')
+                const payload = { username: req.user.username };
+                const token = jwt.sign(payload, "secret", { expiresIn: '1h' })
+                return res.status(200).json({ success: true, data: token })
+            }else{
+                const expired = 'expired'
+                return res.status(400).json({success: false, data: expired})
+            }
+        }
+    })
+})
 
 module.exports = router

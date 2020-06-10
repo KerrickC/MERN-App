@@ -34,7 +34,7 @@ const TestPost = (props) => {
                     <Form.Group controlId="formAuthor">
                         <Form.Control type="text" id="author" placeholder="Enter author" />
                     </Form.Group>
-                    <Button variant="primary" onClick={postData}>
+                    <Button variant="primary" type="submit" onClick={postData}>
                         Submit
                         </Button>
                 </Form>
