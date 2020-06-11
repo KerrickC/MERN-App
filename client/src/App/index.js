@@ -1,64 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import Cards from '../components/Cards';
-import Login from '../pages/login'
-import axios from 'axios'
-import './App.css'
+import React, { useState, useEffect } from "react";
+import Cards from "../components/Cards";
+import Login from "../pages/login";
+import axios from "axios";
+import "./App.css";
+import Decode from "jwt-decode";
 
-const baseURL = 'http://localhost:3004/api'
+const baseURL = "http://localhost:3004/api";
 
 const App = (props) => {
+  const [loggedIn, setLogged] = useState(false);
+  const [user, setUser] = useState("");
 
-  const [loggedIn, setLogged] = useState(false)
-  const [user, setUser] = useState('')
-
-
-  const tok = localStorage.getItem('token')
+  const tok = localStorage.getItem("token");
 
   useEffect(() => {
     //console.log(tok)
-    axios.post(baseURL + '/refresh', null, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    }).then((res) => {
-      if(res.status === 200){
-        setLogged(true)
-        console.log('success')
-        localStorage.setItem('token', res.data.data)
-      }else{
-        console.log('logged out1')
-        setLogged(false)
-        localStorage.removeItem('token')
-      }
-    }).catch((err) => {
-      if (err) {
-        console.log(err)
-        setLogged(false)
-        localStorage.removeItem('token')
-      }
-    })
-  }, [])
-
+    axios
+      .post(baseURL + "/refresh", null, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          setLogged(true);
+          const decodeToken = Decode(res.data.data);
+          setUser(decodeToken.username);
+          console.log("success");
+          localStorage.setItem("token", res.data.data);
+        } else {
+          console.log("logged out1");
+          setLogged(false);
+          localStorage.removeItem("token");
+        }
+      })
+      .catch((err) => {
+        if (err) {
+          console.log(err);
+          setLogged(false);
+          localStorage.removeItem("token");
+        }
+      });
+  }, []);
 
   const logout = () => {
-    if(tok){
-      localStorage.removeItem('token')
+    if (tok) {
+      localStorage.removeItem("token");
     }
-    setLogged(false)
-  }
-
+    setLogged(false);
+  };
 
   return (
     <div className="App">
       <header className="App-header">
         <h1>Test App</h1>
-        <button onClick={logout} >Logout</button>
+        <button onClick={logout}>Logout</button>
       </header>
-      {loggedIn ?
-        <Cards user={user}/> : <Login setUser={setUser} setLogged={setLogged} />
-      }
+      {loggedIn ? (
+        <Cards user={user} />
+      ) : (
+        <Login setUser={setUser} setLogged={setLogged} />
+      )}
     </div>
   );
-}
+};
 
 export default App;
