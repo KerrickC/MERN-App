@@ -2,6 +2,7 @@ import React from "react";
 import { useState } from "react";
 import axios from "axios";
 import Decode from "jwt-decode";
+import "../components/styles/Cards.css";
 
 const baseURL = "http://localhost:3004/api";
 
@@ -39,23 +40,31 @@ const Login = (props) => {
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <h1>Login</h1>
-      <input
-        onChange={(e) => setusername(e.target.value)}
-        type="text"
-        name="username"
-        placeholder="username"
-        value={username}
-      />
-      <input
-        onChange={(e) => setpassword(e.target.value)}
-        type="password"
-        name="password"
-        placeholder="password"
-        value={password}
-      />
-      <input type="submit" value="Submit" />
+    <form className="login-comp" onSubmit={onSubmit}>
+      <h2 className="login-title">Login</h2>
+      <div className="login-form">
+        <div classNamel="ogin-field">
+          <p>Username</p>
+          <input
+            onChange={(e) => setusername(e.target.value)}
+            type="text"
+            name="username"
+            placeholder="username"
+            value={username}
+            className="login-field"
+          />
+          <p>Password</p>
+          <input
+            onChange={(e) => setpassword(e.target.value)}
+            type="password"
+            name="password"
+            placeholder="password"
+            value={password}
+            className="login-field"
+          />
+        </div>
+        <input id="login-button" type="submit" value="Submit" />
+      </div>
     </form>
   );
 };

@@ -23,7 +23,7 @@ const TestPost = (props) => {
   //grant access
 
   return (
-    <div className="">
+    <div className="post-form">
       <Card className="card">
         <h1>Post</h1>
         <Form>

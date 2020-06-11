@@ -1,0 +1,7 @@
+.post-form {
+  display: flex;
+}
+
+Form.Control {
+  margin: 10px;
+}

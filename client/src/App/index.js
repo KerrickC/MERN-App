@@ -53,11 +53,11 @@ const App = (props) => {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Test App</h1>
+        <h1 id="app-title">Test App</h1>
         <button onClick={logout}>Logout</button>
       </header>
       {loggedIn ? (
-        <Cards user={user} />
+        <Cards className="cards" user={user} />
       ) : (
         <Login setUser={setUser} setLogged={setLogged} />
       )}
