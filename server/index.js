@@ -4,7 +4,7 @@ const cors = require("cors"); //cross-origin resource sharing
 const db = require("./db");
 const testRouter = require("./routes/test-routes");
 const cookieParser = require("cookie-parser");
-const passport = require("passport"); //authentication
+const passport = require("passport"); // authentication
 
 const app = express();
 const apiPort = 3004;
