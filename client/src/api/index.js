@@ -7,7 +7,7 @@ const header = {
 };
 
 const api = axios.create({
-  baseURL: "http://localhost:3004/api",
+  baseURL: "http://localhost:3000/api",
 });
 
 //axios calls, header is for jwt authentication

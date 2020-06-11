@@ -4,7 +4,7 @@ import axios from "axios";
 import Decode from "jwt-decode";
 import "../components/styles/Cards.css";
 
-const baseURL = "http://localhost:3004/api";
+const baseURL = "http://localhost:3000/api";
 
 const Login = (props) => {
   const [username, setusername] = useState("");

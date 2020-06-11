@@ -5,7 +5,7 @@ import axios from "axios";
 import "./App.css";
 import Decode from "jwt-decode";
 
-const baseURL = "http://localhost:3004/api";
+const baseURL = "http://localhost:3000/api";
 
 const App = (props) => {
   const [loggedIn, setLogged] = useState(false);
@@ -46,6 +46,9 @@ const App = (props) => {
   const logout = () => {
     if (tok) {
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    } else {
+      console.log("You are not currently signed in or something went wrong");
     }
     setLogged(false);
   };

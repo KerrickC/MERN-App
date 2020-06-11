@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const passport = require("passport"); // authentication
 
 const app = express();
-const apiPort = 3004;
+const apiPort = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
