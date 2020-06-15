@@ -4,13 +4,35 @@ import * as api from "../api/index";
 import TestGet from "../pages/TestGet";
 import TestDelete from "../pages/TestDelete";
 import TestPost from "../pages/TestPost";
+import { useEffect } from "react";
 
 const Cards = (props) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
 
-  const getAllData = () => {
-    api.getAllTests().then((response) => {
-      setData(response.data.data);
+
+
+  useEffect(() => {
+    if (!data || data.length === 0) {
+      api.getAllTests().then((response) => {
+        setData(response.data.data);
+      });
+    } else {
+
+    }
+  }, [])
+
+  const formatData = () => {
+    return data.map((n, i) => {
+      let item = i + 1;
+      return (
+        <li>
+          <p>Item: {item}</p>
+          <div>{n._id}</div>
+          <div>{n.name}</div>
+          <div>{n.desc}</div>
+          <div>{n.author}</div>
+        </li>
+      );
     });
   };
 
@@ -21,12 +43,13 @@ const Cards = (props) => {
   const postDataArr = (arr) => {
     api.insertTest(arr);
   };
-
+  console.log(data)
   return (
     <React.Fragment>
       <div className="cards">
         <div className="get">
-          <TestGet getData={getAllData} gdata={data} />
+          <h2>Data</h2>
+          {data && data.length > 0 ? <ul>{formatData()}</ul> : <p>no data</p>}
         </div>
         <div className="post">
           <TestPost user={props.user} postData={postDataArr} />
