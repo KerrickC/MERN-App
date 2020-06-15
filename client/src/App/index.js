@@ -56,14 +56,14 @@ const App = (props) => {
   return (
     <div className="App">
       <header className="App-header">
-        <h1 id="app-title">Test App</h1>
+        <h1 id="app-title">MongoDB Authorization/Verification Demo App</h1>
         <button onClick={logout}>Logout</button>
       </header>
       {loggedIn ? (
         <Cards className="cards" user={user} />
       ) : (
-        <Login setUser={setUser} setLogged={setLogged} />
-      )}
+          <Login setUser={setUser} setLogged={setLogged} />
+        )}
     </div>
   );
 };
