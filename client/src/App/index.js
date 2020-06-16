@@ -56,8 +56,12 @@ const App = (props) => {
   return (
     <div className="App">
       <header className="App-header">
-        <h1 id="app-title">MongoDB Authorization/Verification Demo App</h1>
-        <button onClick={logout}>Logout</button>
+        <h1 id="app-title">MERN Authorization/Verification Demo App</h1>
+        {loggedIn ?
+          <button onClick={logout}>Logout</button>
+          :
+          <p></p>
+        }
       </header>
       {loggedIn ? (
         <Cards className="cards" user={user} />
