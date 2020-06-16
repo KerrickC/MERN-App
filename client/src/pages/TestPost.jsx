@@ -2,8 +2,20 @@ import React from "react";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { useState } from "react";
 
 const TestPost = (props) => {
+
+  const [newpost, setnewpost] = useState(false)
+
+  const newPost = () => {
+    setnewpost(true)
+  }
+
+  const cancelPost = () => {
+    setnewpost(false)
+  }
+
   const postData = () => {
     let title = document.getElementById("title").value;
     let desc = document.getElementById("desc").value;
@@ -25,7 +37,8 @@ const TestPost = (props) => {
   return (
     <div className="post-form">
       <Card className="card">
-        <h1>Post</h1>
+        <button onClick={newPost}>New Post</button>
+        {newpost ? (
         <Form>
           <Form.Group controlId="formTitle">
             <Form.Control type="text" id="title" placeholder="Enter title" />
@@ -48,7 +61,14 @@ const TestPost = (props) => {
           <Button variant="primary" type="submit" onClick={postData}>
             Submit
           </Button>
+          <Button variant="primary" type="submit" onClick={cancelPost}>
+            Cancel Post
+          </Button>
         </Form>
+        ) 
+        : 
+        (<p>Post Something Awesome!</p>)
+        }
       </Card>
     </div>
   );

@@ -26,7 +26,7 @@ const Cards = (props) => {
       let item = i + 1;
       return (
         <li>
-          <p>Item: {item}</p>
+          <p>Post: {item}</p>
           <div>{n._id}</div>
           <div>{n.name}</div>
           <div>{n.desc}</div>
@@ -48,7 +48,7 @@ const Cards = (props) => {
     <React.Fragment>
       <div className="cards">
         <div className="get">
-          <h2>Data</h2>
+          <h2>Posts</h2>
           {data && data.length > 0 ? <ul>{formatData()}</ul> : <p>no data</p>}
         </div>
         <div className="post">
