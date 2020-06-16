@@ -36,15 +36,14 @@ const TestPost = (props) => {
 
   return (
     <div className="post-form">
-      <Card className="card">
-        <button onClick={newPost}>New Post</button>
-        {newpost ? (
+      {newpost ? (
         <Form>
           <Form.Group controlId="formTitle">
-            <Form.Control type="text" id="title" placeholder="Enter title" />
+            <Form.Control controlId="controlid" type="text" id="title" placeholder="Enter title" />
           </Form.Group>
           <Form.Group controlId="formDesc">
             <Form.Control
+              controlId="controlid"
               type="text"
               id="desc"
               placeholder="Enter description"
@@ -52,6 +51,7 @@ const TestPost = (props) => {
           </Form.Group>
           <Form.Group controlId="formAuthor">
             <Form.Control
+              controlId="controlid"
               type="text"
               id="author"
               value={props.user}
@@ -61,15 +61,14 @@ const TestPost = (props) => {
           <Button variant="primary" type="submit" onClick={postData}>
             Submit
           </Button>
-          <Button variant="primary" type="submit" onClick={cancelPost}>
+          <Button variant="primary" onClick={cancelPost}>
             Cancel Post
           </Button>
         </Form>
-        ) 
-        : 
-        (<p>Post Something Awesome!</p>)
-        }
-      </Card>
+      )
+        :
+        (<button onClick={newPost}>New Post</button>)
+      }
     </div>
   );
 };

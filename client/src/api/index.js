@@ -20,6 +20,18 @@ export const insertTest = (payload) => {
   };
   return api.post(`/test`, payload, postHeader);
 };
+
+export const updateTest = (id) => {
+  const postHeader = {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      User: `${localStorage.getItem("user")}`,
+    },
+  };
+  return api.put(`/test/${id}`, postHeader);
+};
+
+
 export const getAllTests = () =>
   api.get(`/tests`, {
     headers: {

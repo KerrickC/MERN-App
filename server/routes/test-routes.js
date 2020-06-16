@@ -89,12 +89,12 @@ router.get(
   passport.authenticate("jwt", { successFlash: true, session: false }),
   async (req, res) => {
     const user = req.headers.user;
-    console.log(user);
+    //console.log(user);
     await TestSchema.find({}, (err, tests) => {
       const filteredData = tests.filter((n) => {
         return n.allowedUsers.includes(user);
       });
-      console.log(filteredData);
+      //console.log(filteredData);
       if (err) {
         return res.status(400).json({ success: false, error: err });
       }
@@ -184,5 +184,10 @@ router.post(
     });
   }
 );
+
+//update post 
+router.put("/test/:id", passport.authenticate("jwt", { successFlash: true, session: false }), (req, res) => {
+  console.log(req)
+})
 
 module.exports = router;
